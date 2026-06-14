@@ -47,14 +47,8 @@ generated `.nupkg`/`.snupkg` artifacts, and publishes to NuGet.org using
 no long-lived API key). The job requests a short-lived key via `NuGet/login@v1`, which requires the
 job permission `id-token: write`.
 
-Manual publishing workflows are also available:
-
-```text
-Publish NuGet
-Publish GitHub Packages
-```
-
-For manual NuGet publishing, provide:
+A manual publishing workflow (`Publish NuGet`) is also available for re-publishing a specific
+version. Provide:
 
 ```text
 git_ref: v0.1.0-preview.1
@@ -89,5 +83,3 @@ NuGet.org publishing uses Trusted Publishing (OIDC) instead of a long-lived API 
 
 The workflows exchange the GitHub OIDC token for a short-lived NuGet API key at publish time, so no
 `NUGET_API_KEY` secret is needed.
-
-GitHub Packages publishing uses the built-in `GITHUB_TOKEN` and needs no extra secret.

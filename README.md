@@ -2,8 +2,6 @@
 
 [![CI](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml)
 [![Release](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/release.yml/badge.svg)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/release.yml)
-[![Publish NuGet](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-nuget.yml/badge.svg)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-nuget.yml)
-[![Publish GitHub Packages](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-github-packages.yml/badge.svg)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-github-packages.yml)
 [![License](https://img.shields.io/github/license/ai-iskuzhin/TelegramGatewayNet?style=flat-square)](https://github.com/ai-iskuzhin/TelegramGatewayNet/blob/main/LICENSE)
 [![Targets](https://img.shields.io/badge/targets-netstandard2.0%20%7C%20net8.0%20%7C%20net10.0-512BD4?logo=dotnet&style=flat-square)](https://dotnet.microsoft.com/)
 

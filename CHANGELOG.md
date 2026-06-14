@@ -6,7 +6,9 @@ The project uses Semantic Versioning. Versions below `1.0.0` are preview release
 
 ## Unreleased
 
-No changes yet.
+### Removed
+
+- Removed the GitHub Packages publishing workflow. Packages are published to NuGet.org only.
 
 ## 0.1.0-preview.2
 
