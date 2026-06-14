@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <Version>0.1.0-preview.1</Version>
+    <Authors>TelegramGatewayNet contributors</Authors>
+    <PackageProjectUrl>https://github.com/ai-iskuzhin/TelegramGatewayNet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ai-iskuzhin/TelegramGatewayNet</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>telegram;gateway;otp;verification;sms;2fa;auth</PackageTags>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+</Project>
