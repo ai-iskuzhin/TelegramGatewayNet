@@ -83,11 +83,9 @@ NuGet.org publishing uses Trusted Publishing (OIDC) instead of a long-lived API 
    | --- | --- | --- | --- |
    | `ai-iskuzhin` | `TelegramGatewayNet` | `release.yml` | empty |
    | `ai-iskuzhin` | `TelegramGatewayNet` | `publish-nuget.yml` | empty |
-2. Configure a repository secret with your nuget.org **profile name** (not your email):
-
-```text
-NUGET_USER
-```
+2. Configure a repository **variable** (Settings → Secrets and variables → Actions → Variables)
+   named `NUGET_USER` with your nuget.org **profile name** (not your email). A username is not
+   sensitive, so it is a variable (`vars.NUGET_USER`), not a secret.
 
 The workflows exchange the GitHub OIDC token for a short-lived NuGet API key at publish time, so no
 `NUGET_API_KEY` secret is needed.
