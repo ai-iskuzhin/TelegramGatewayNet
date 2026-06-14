@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/ai-iskuzhin/TelegramGatewayNet/main/assets/icon.png" width="128" alt="TelegramGatewayNet logo" />
+</p>
+
 # TelegramGatewayNet
 
 [![CI](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml)
