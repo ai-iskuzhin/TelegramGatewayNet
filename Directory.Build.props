@@ -4,14 +4,21 @@
     <Nullable>enable</Nullable>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-    <Version>1.0.0</Version>
-    <Authors>TelegramGatewayNet contributors</Authors>
+    <Version>1.0.1</Version>
+    <Authors>ai-iskuzhin</Authors>
+    <Company>ai-iskuzhin</Company>
+    <Copyright>Copyright (c) ai-iskuzhin 2026</Copyright>
     <PackageProjectUrl>https://github.com/ai-iskuzhin/TelegramGatewayNet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ai-iskuzhin/TelegramGatewayNet</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>telegram;gateway;otp;verification;sms;2fa;auth</PackageTags>
+    <PackageReleaseNotes>See https://github.com/ai-iskuzhin/TelegramGatewayNet/blob/main/CHANGELOG.md</PackageReleaseNotes>
+
+    <!-- Symbols + Source Link: make the published library step-debuggable. -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 </Project>

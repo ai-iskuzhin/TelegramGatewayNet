@@ -8,6 +8,15 @@ The project uses Semantic Versioning. Versions below `1.0.0` are preview release
 
 No changes yet.
 
+## 1.0.1
+
+### Added
+
+- Source Link support (`PublishRepositoryUrl`, `EmbedUntrackedSources`) so the published library is step-debuggable alongside the existing `.snupkg` symbol package.
+- Package metadata: `Copyright`, `Company`, and `PackageReleaseNotes` (linking to this changelog).
+
+No code or API changes.
+
 ## 1.0.0
 
 First stable release. The public API has been validated against the live Telegram Gateway API and is now covered by Semantic Versioning guarantees. No API changes since `0.1.0-preview.3`.
