@@ -14,6 +14,7 @@ No changes yet.
 
 - Source Link support (`PublishRepositoryUrl`, `EmbedUntrackedSources`) so the published library is step-debuggable alongside the existing `.snupkg` symbol package.
 - Package metadata: `Copyright`, `Company`, and `PackageReleaseNotes` (linking to this changelog).
+- Package icon (`assets/icon.png`, 128×128). The vector master (`assets/icon.svg`) is kept in the repository.
 
 No code or API changes.
 
