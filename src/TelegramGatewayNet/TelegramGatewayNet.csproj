@@ -9,6 +9,8 @@
     <PackageId>TelegramGatewayNet</PackageId>
     <Description>A clean, dependency-light .NET SDK for the Telegram Gateway API: send verification codes, check send ability, verify codes, revoke messages, and validate delivery report webhooks.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- Activates automatically once icon.png (128x128, transparent PNG) is added next to this project. -->
+    <PackageIcon Condition="Exists('icon.png')">icon.png</PackageIcon>
   </PropertyGroup>
 
   <!-- System.Text.Json is in-box on net8.0+; only netstandard2.0 needs the package. -->
@@ -18,6 +20,10 @@
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup Condition="Exists('icon.png')">
+    <None Include="icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>
