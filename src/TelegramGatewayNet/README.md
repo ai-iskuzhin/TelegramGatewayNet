@@ -6,7 +6,7 @@ deliver verification codes (OTP) to users over Telegram.
 ## Install
 
 ```bash
-dotnet add package TelegramGatewayNet --prerelease
+dotnet add package TelegramGatewayNet
 ```
 
 Multi-targets `netstandard2.0`, `net8.0`, and `net10.0` — runs on .NET Framework 4.6.1+, .NET Core,

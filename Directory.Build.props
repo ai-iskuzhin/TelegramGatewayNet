@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
-    <Version>0.1.0-preview.3</Version>
+    <Version>1.0.0</Version>
     <Authors>TelegramGatewayNet contributors</Authors>
     <PackageProjectUrl>https://github.com/ai-iskuzhin/TelegramGatewayNet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/ai-iskuzhin/TelegramGatewayNet</RepositoryUrl>

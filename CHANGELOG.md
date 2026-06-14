@@ -8,6 +8,17 @@ The project uses Semantic Versioning. Versions below `1.0.0` are preview release
 
 No changes yet.
 
+## 1.0.0
+
+First stable release. The public API has been validated against the live Telegram Gateway API and is now covered by Semantic Versioning guarantees. No API changes since `0.1.0-preview.3`.
+
+Public surface:
+
+- `TelegramGatewayClient` / `ITelegramGatewayClient` covering `sendVerificationMessage`, `checkSendAbility`, `checkVerificationStatus`, and `revokeVerificationMessage`, each returning `GatewayResult<T>`.
+- Result-based error model: `ok: false` is returned as data via `GatewayResult<T>.Error`; only transport failures and malformed responses throw `TelegramGatewayException` (which exposes `StatusCode` and `ResponseBody`).
+- Typed request/response models, forward-compatible `snake_case` status enums, and `DeliveryReportValidator` for HMAC-SHA256 webhook signature verification.
+- Multi-targets `netstandard2.0`, `net8.0`, and `net10.0`; `System.Text.Json` is a `netstandard2.0`-only dependency.
+
 ## 0.1.0-preview.3
 
 ### Added

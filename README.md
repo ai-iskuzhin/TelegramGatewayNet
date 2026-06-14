@@ -13,13 +13,13 @@ A clean, dependency-light .NET SDK for the [Telegram Gateway API](https://core.t
 Use it to deliver verification codes (OTP) to users over Telegram — a cheaper, more secure
 alternative to SMS.
 
-Current status: latest preview is `0.1.0-preview.1`. The SDK surface covers every documented
-Gateway API method plus delivery report (webhook) signature validation.
+Current status: stable `1.0.0`. The SDK surface covers every documented Gateway API method plus
+delivery report (webhook) signature validation, and follows Semantic Versioning.
 
 ## Installation
 
 ```bash
-dotnet add package TelegramGatewayNet --prerelease
+dotnet add package TelegramGatewayNet
 ```
 
 The library multi-targets `netstandard2.0`, `net8.0`, and `net10.0`. The `netstandard2.0` asset
