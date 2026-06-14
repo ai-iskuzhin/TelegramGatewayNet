@@ -40,18 +40,23 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG_NAME: ${{ github.ref_name }}
         run: |
-          args=(
-            artifacts/packages/*
-            --title "TelegramGatewayNet ${TAG_NAME#v}"
-            --generate-notes
-            --verify-tag
-          )
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Release $TAG_NAME already exists; uploading/refreshing assets."
+            gh release upload "$TAG_NAME" artifacts/packages/* --clobber
+          else
+            args=(
+              artifacts/packages/*
+              --title "TelegramGatewayNet ${TAG_NAME#v}"
+              --generate-notes
+              --verify-tag
+            )
 
-          if [[ "$TAG_NAME" == *-* ]]; then
-            args+=(--prerelease)
+            if [[ "$TAG_NAME" == *-* ]]; then
+              args+=(--prerelease)
+            fi
+
+            gh release create "$TAG_NAME" "${args[@]}"
           fi
-
-          gh release create "$TAG_NAME" "${args[@]}"
 
       - name: NuGet login (OIDC -> temp API key)
         uses: NuGet/login@v1
