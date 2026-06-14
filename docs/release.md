@@ -42,8 +42,10 @@ CI runs on pull requests, pushes to `main`, and `v*` tags. It restores, builds, 
 package, and uploads the package artifacts.
 
 Release automation runs when a `v*` tag is pushed. It creates a GitHub Release, attaches the
-generated `.nupkg`/`.snupkg` artifacts, and publishes to NuGet.org when the repository secret
-`NUGET_API_KEY` is configured.
+generated `.nupkg`/`.snupkg` artifacts, and publishes to NuGet.org using
+[Trusted Publishing](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing) (OIDC —
+no long-lived API key). The job requests a short-lived key via `NuGet/login@v1`, which requires the
+job permission `id-token: write`.
 
 Manual publishing workflows are also available:
 
@@ -70,12 +72,22 @@ git push origin v0.1.0-preview.1
 
 Preview tags such as `v0.1.0-preview.1` are marked as GitHub prereleases automatically.
 
-## Repository Secrets
+## NuGet.org Trusted Publishing
 
-For NuGet.org publishing, configure a repository secret named:
+NuGet.org publishing uses Trusted Publishing (OIDC) instead of a long-lived API key. Set it up once:
+
+1. On nuget.org, open **Trusted Publishing** and add a policy:
+   - Repository Owner: `ai-iskuzhin`
+   - Repository: `TelegramGatewayNet`
+   - Workflow File: `release.yml` (and/or `publish-nuget.yml` as a second policy)
+   - Environment: leave empty
+2. Configure a repository secret with your nuget.org **profile name** (not your email):
 
 ```text
-NUGET_API_KEY
+NUGET_USER
 ```
+
+The workflows exchange the GitHub OIDC token for a short-lived NuGet API key at publish time, so no
+`NUGET_API_KEY` secret is needed.
 
 GitHub Packages publishing uses the built-in `GITHUB_TOKEN` and needs no extra secret.
