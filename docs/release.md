@@ -76,11 +76,13 @@ Preview tags such as `v0.1.0-preview.1` are marked as GitHub prereleases automat
 
 NuGet.org publishing uses Trusted Publishing (OIDC) instead of a long-lived API key. Set it up once:
 
-1. On nuget.org, open **Trusted Publishing** and add a policy:
-   - Repository Owner: `ai-iskuzhin`
-   - Repository: `TelegramGatewayNet`
-   - Workflow File: `release.yml` (and/or `publish-nuget.yml` as a second policy)
-   - Environment: leave empty
+1. On nuget.org, open **Trusted Publishing** and add a policy for each publishing workflow. A policy
+   binds to a single workflow file, so create both:
+
+   | Repository Owner | Repository | Workflow File | Environment |
+   | --- | --- | --- | --- |
+   | `ai-iskuzhin` | `TelegramGatewayNet` | `release.yml` | empty |
+   | `ai-iskuzhin` | `TelegramGatewayNet` | `publish-nuget.yml` | empty |
 2. Configure a repository secret with your nuget.org **profile name** (not your email):
 
 ```text
