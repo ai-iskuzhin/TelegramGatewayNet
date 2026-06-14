@@ -7,16 +7,21 @@ namespace TelegramGatewayNet
 {
     /// <summary>
     /// A client for the Telegram Gateway API (<c>https://gatewayapi.telegram.org</c>).
+    /// <para>
+    /// Methods return a <see cref="GatewayResult{T}"/>: an <c>ok: false</c> API response is a normal
+    /// outcome reported via <see cref="GatewayResult{T}.Error"/>, not an exception. Only transport
+    /// failures and malformed responses throw <see cref="TelegramGatewayException"/>.
+    /// </para>
     /// </summary>
     public interface ITelegramGatewayClient
     {
         /// <summary>
         /// Sends a verification message. Charges apply per successful delivery, except when sending
-        /// to your own phone number. On success, returns a <see cref="RequestStatus"/>.
+        /// to your own phone number.
         /// </summary>
         /// <param name="request">The send parameters.</param>
         /// <param name="cancellationToken">A token to cancel the operation.</param>
-        Task<RequestStatus> SendVerificationMessageAsync(
+        Task<GatewayResult<RequestStatus>> SendVerificationMessageAsync(
             SendVerificationMessageRequest request,
             CancellationToken cancellationToken = default);
 
@@ -27,28 +32,28 @@ namespace TelegramGatewayNet
         /// </summary>
         /// <param name="request">The check parameters.</param>
         /// <param name="cancellationToken">A token to cancel the operation.</param>
-        Task<RequestStatus> CheckSendAbilityAsync(
+        Task<GatewayResult<RequestStatus>> CheckSendAbilityAsync(
             CheckSendAbilityRequest request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Checks the status of a previously sent verification message, optionally validating the
-        /// code entered by the user. On success, returns a <see cref="RequestStatus"/>.
+        /// code entered by the user.
         /// </summary>
         /// <param name="request">The check parameters.</param>
         /// <param name="cancellationToken">A token to cancel the operation.</param>
-        Task<RequestStatus> CheckVerificationStatusAsync(
+        Task<GatewayResult<RequestStatus>> CheckVerificationStatusAsync(
             CheckVerificationStatusRequest request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Revokes a previously sent verification message. Returns <c>true</c> if the revocation
-        /// request was received; this does not guarantee the message will be deleted (a message
-        /// that has already been delivered or read will not be removed).
+        /// Revokes a previously sent verification message. A successful result carries <c>true</c>
+        /// if the revocation request was received; this does not guarantee the message will be
+        /// deleted (a message that has already been delivered or read will not be removed).
         /// </summary>
         /// <param name="request">The revoke parameters.</param>
         /// <param name="cancellationToken">A token to cancel the operation.</param>
-        Task<bool> RevokeVerificationMessageAsync(
+        Task<GatewayResult<bool>> RevokeVerificationMessageAsync(
             RevokeVerificationMessageRequest request,
             CancellationToken cancellationToken = default);
     }

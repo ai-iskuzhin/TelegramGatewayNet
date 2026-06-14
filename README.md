@@ -44,7 +44,7 @@ using TelegramGatewayNet.Requests;
 
 using var client = new TelegramGatewayClient("YOUR_GATEWAY_API_TOKEN");
 
-var status = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
+var result = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
 {
     CodeLength = 6,                          // ignored if you set Code yourself
     Ttl = 60,                                // refunded if undelivered within 60s
@@ -52,7 +52,10 @@ var status = await client.SendVerificationMessageAsync(new SendVerificationMessa
     CallbackUrl = "https://my.webhook/auth"  // optional delivery reports
 });
 
-Console.WriteLine(status.RequestId);
+if (result.Ok)
+    Console.WriteLine(result.Value.RequestId);
+else
+    Console.WriteLine($"Could not send: {result.Error}");
 ```
 
 The token is sent as an `Authorization: Bearer <token>` header on every request, and all calls are
@@ -60,12 +63,14 @@ made as `application/json` POSTs.
 
 ## Supported Methods
 
+All methods return a `GatewayResult<T>` (see [Error Handling](#error-handling)).
+
 | Telegram method | Client API | Returns |
 | --- | --- | --- |
-| `sendVerificationMessage` | `SendVerificationMessageAsync` | `RequestStatus` |
-| `checkSendAbility` | `CheckSendAbilityAsync` | `RequestStatus` |
-| `checkVerificationStatus` | `CheckVerificationStatusAsync` | `RequestStatus` |
-| `revokeVerificationMessage` | `RevokeVerificationMessageAsync` | `bool` |
+| `sendVerificationMessage` | `SendVerificationMessageAsync` | `GatewayResult<RequestStatus>` |
+| `checkSendAbility` | `CheckSendAbilityAsync` | `GatewayResult<RequestStatus>` |
+| `checkVerificationStatus` | `CheckVerificationStatusAsync` | `GatewayResult<RequestStatus>` |
+| `revokeVerificationMessage` | `RevokeVerificationMessageAsync` | `GatewayResult<bool>` |
 
 ## Checking Send Ability First
 
@@ -75,10 +80,13 @@ To verify a user can receive a code before sending one (and to avoid paying twic
 ```csharp
 var ability = await client.CheckSendAbilityAsync(new CheckSendAbilityRequest("+391234567890"));
 
-var status = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
+if (ability.Ok)
 {
-    RequestId = ability.RequestId   // makes the send free of charge
-});
+    var send = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
+    {
+        RequestId = ability.Value.RequestId   // makes the send free of charge
+    });
+}
 ```
 
 ## Verifying a User's Code
@@ -88,12 +96,13 @@ When you let Telegram generate the code, verify the user's input with `checkVeri
 ```csharp
 using TelegramGatewayNet.Models;
 
-var status = await client.CheckVerificationStatusAsync(new CheckVerificationStatusRequest(requestId)
+var result = await client.CheckVerificationStatusAsync(new CheckVerificationStatusRequest(requestId)
 {
     Code = userEnteredCode
 });
 
-bool valid = status.VerificationStatus?.Status == CodeVerificationStatus.CodeValid;
+bool valid = result.Ok
+    && result.Value.VerificationStatus?.Status == CodeVerificationStatus.CodeValid;
 ```
 
 Even if you set the code yourself, calling this method after the user enters a code lets Telegram
@@ -125,20 +134,35 @@ check that the timestamp is recent to guard against replayed reports.
 
 ## Error Handling
 
-API responses with `ok: false`, transport failures, and malformed payloads are surfaced as
-`TelegramGatewayException`. For API-level errors, the `Error` property carries the code returned by
-Telegram (for example `ACCESS_TOKEN_INVALID`):
+The SDK distinguishes *expected* API outcomes from *exceptional* failures:
+
+- **`ok: false` is a normal result, not an exception.** Every method returns a `GatewayResult<T>`.
+  When `Ok` is `true`, read `Value`; when `false`, `Error` holds the API error code (for example
+  `PHONE_NUMBER_INVALID` or `ACCESS_TOKEN_INVALID`). No `try/catch` needed for routine failures.
+- **Only failures that prevent getting a valid answer throw `TelegramGatewayException`** — transport
+  errors (network, DNS, TLS, timeout) and malformed/unexpected response bodies.
 
 ```csharp
 try
 {
-    await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890"));
+    var result = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890"));
+
+    if (result.Ok)
+        Console.WriteLine(result.Value.RequestId);
+    else
+        Console.WriteLine($"API error: {result.Error}");   // expected business failure
 }
 catch (TelegramGatewayException ex)
 {
-    Console.WriteLine(ex.Error); // e.g. "ACCESS_TOKEN_INVALID", or null for transport errors
+    // No valid response was obtained (network failure or malformed body).
+    Console.WriteLine(ex.Message);
+    Console.WriteLine(ex.StatusCode);     // HTTP status, or null for transport failures
+    Console.WriteLine(ex.ResponseBody);   // raw body snippet, when a response was received
 }
 ```
+
+A cancelled `CancellationToken` surfaces as the standard `OperationCanceledException`, not as a
+`TelegramGatewayException`.
 
 ## Dependency Injection
 

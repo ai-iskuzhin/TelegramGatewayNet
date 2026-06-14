@@ -20,7 +20,7 @@ using TelegramGatewayNet.Requests;
 
 using var client = new TelegramGatewayClient("YOUR_GATEWAY_API_TOKEN");
 
-var status = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
+var result = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
 {
     CodeLength = 6,
     Ttl = 60,
@@ -28,7 +28,10 @@ var status = await client.SendVerificationMessageAsync(new SendVerificationMessa
     CallbackUrl = "https://my.webhook.here/auth"
 });
 
-Console.WriteLine(status.RequestId);
+if (result.Ok)
+    Console.WriteLine(result.Value.RequestId);
+else
+    Console.WriteLine(result.Error);
 ```
 
 ## Supported API
@@ -43,22 +46,26 @@ Console.WriteLine(status.RequestId);
 It also includes a `DeliveryReportValidator` for verifying the `X-Request-Signature` of delivery
 report webhooks.
 
+All methods return a `GatewayResult<T>`.
+
 ## Verifying a Code
 
 ```csharp
-var status = await client.CheckVerificationStatusAsync(new CheckVerificationStatusRequest(requestId)
+var result = await client.CheckVerificationStatusAsync(new CheckVerificationStatusRequest(requestId)
 {
     Code = userEnteredCode
 });
 
-bool valid = status.VerificationStatus?.Status == CodeVerificationStatus.CodeValid;
+bool valid = result.Ok
+    && result.Value.VerificationStatus?.Status == CodeVerificationStatus.CodeValid;
 ```
 
 ## Error Handling
 
-API responses with `ok: false`, transport failures, and malformed responses are thrown as
-`TelegramGatewayException`. The `Error` property carries the API error code (for example
-`ACCESS_TOKEN_INVALID`).
+An `ok: false` API response is a normal outcome, returned as a failed `GatewayResult<T>` whose
+`Error` carries the API error code (for example `ACCESS_TOKEN_INVALID`) — it is not thrown. Only
+transport failures and malformed responses throw `TelegramGatewayException` (which exposes
+`StatusCode` and `ResponseBody` for diagnosis).
 
 ## Repository
 

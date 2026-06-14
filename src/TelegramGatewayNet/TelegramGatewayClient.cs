@@ -72,7 +72,7 @@ namespace TelegramGatewayNet
         }
 
         /// <inheritdoc />
-        public Task<RequestStatus> SendVerificationMessageAsync(
+        public Task<GatewayResult<RequestStatus>> SendVerificationMessageAsync(
             SendVerificationMessageRequest request,
             CancellationToken cancellationToken = default)
         {
@@ -80,7 +80,7 @@ namespace TelegramGatewayNet
         }
 
         /// <inheritdoc />
-        public Task<RequestStatus> CheckSendAbilityAsync(
+        public Task<GatewayResult<RequestStatus>> CheckSendAbilityAsync(
             CheckSendAbilityRequest request,
             CancellationToken cancellationToken = default)
         {
@@ -88,7 +88,7 @@ namespace TelegramGatewayNet
         }
 
         /// <inheritdoc />
-        public Task<RequestStatus> CheckVerificationStatusAsync(
+        public Task<GatewayResult<RequestStatus>> CheckVerificationStatusAsync(
             CheckVerificationStatusRequest request,
             CancellationToken cancellationToken = default)
         {
@@ -96,14 +96,14 @@ namespace TelegramGatewayNet
         }
 
         /// <inheritdoc />
-        public Task<bool> RevokeVerificationMessageAsync(
+        public Task<GatewayResult<bool>> RevokeVerificationMessageAsync(
             RevokeVerificationMessageRequest request,
             CancellationToken cancellationToken = default)
         {
             return InvokeAsync<bool>("revokeVerificationMessage", request, cancellationToken);
         }
 
-        private async Task<TResult> InvokeAsync<TResult>(string method, object request, CancellationToken cancellationToken)
+        private async Task<GatewayResult<TResult>> InvokeAsync<TResult>(string method, object request, CancellationToken cancellationToken)
         {
             if (request == null)
             {
@@ -126,6 +126,7 @@ namespace TelegramGatewayNet
 
                 using (httpResponse)
                 {
+                    int statusCode = (int)httpResponse.StatusCode;
 #if NET5_0_OR_GREATER
                     string body = await httpResponse.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
 #else
@@ -139,23 +140,39 @@ namespace TelegramGatewayNet
                     catch (JsonException ex)
                     {
                         throw new TelegramGatewayException(
-                            $"Failed to parse Telegram Gateway response (HTTP {(int)httpResponse.StatusCode}): {ex.Message}", ex);
+                            $"Failed to parse Telegram Gateway response (HTTP {statusCode}): {ex.Message}. Body: {Truncate(body)}",
+                            statusCode, body, ex);
                     }
 
                     if (response == null)
                     {
                         throw new TelegramGatewayException(
-                            $"Telegram Gateway returned an empty response (HTTP {(int)httpResponse.StatusCode}).", null);
+                            $"Telegram Gateway returned an empty response (HTTP {statusCode}).",
+                            statusCode, body, null);
                     }
 
                     if (!response.Ok)
                     {
-                        throw new TelegramGatewayException(response.Error ?? "UNKNOWN_ERROR");
+                        // An ok:false response is an expected outcome, not an exception.
+                        return GatewayResult<TResult>.Failure(response.Error ?? "UNKNOWN_ERROR");
                     }
 
-                    return response.Result!;
+                    return GatewayResult<TResult>.Success(response.Result!);
                 }
             }
+        }
+
+        private const int MaxBodySnippetLength = 2048;
+
+        private static string Truncate(string body)
+        {
+            if (string.IsNullOrEmpty(body))
+            {
+                return "<empty>";
+            }
+            return body.Length <= MaxBodySnippetLength
+                ? body
+                : body.Substring(0, MaxBodySnippetLength) + "… (truncated)";
         }
 
         /// <summary>Disposes the underlying <see cref="HttpClient"/> if it is owned by this client.</summary>

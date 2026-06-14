@@ -6,6 +6,15 @@ The project uses Semantic Versioning. Versions below `1.0.0` are preview release
 
 ## Unreleased
 
+No changes yet.
+
+## 0.1.0-preview.3
+
+### Changed
+
+- **Result-based error model (breaking).** Client methods now return `GatewayResult<T>` instead of the bare payload. An `ok: false` API response (for example `PHONE_NUMBER_INVALID`) is a normal result reported via `GatewayResult<T>.Error` and is no longer thrown.
+- `TelegramGatewayException` is now thrown only for failures that prevent obtaining a valid response — transport errors and malformed/unexpected response bodies. It exposes `StatusCode` and `ResponseBody` for diagnosis, and no longer carries an `Error` code (read `GatewayResult<T>.Error` instead). A cancelled token surfaces as the standard `OperationCanceledException`.
+
 ### Removed
 
 - Removed the GitHub Packages publishing workflow. Packages are published to NuGet.org only.

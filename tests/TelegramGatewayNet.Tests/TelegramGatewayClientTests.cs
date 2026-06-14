@@ -8,7 +8,7 @@ namespace TelegramGatewayNet.Tests;
 
 public sealed class TelegramGatewayClientTests
 {
-    private static TelegramGatewayClient CreateClient(RecordingHandler handler, string token = "TEST_TOKEN")
+    private static TelegramGatewayClient CreateClient(HttpMessageHandler handler, string token = "TEST_TOKEN")
     {
         var httpClient = new HttpClient(handler);
         return new TelegramGatewayClient(token, httpClient, "https://example.test/");
@@ -31,7 +31,7 @@ public sealed class TelegramGatewayClientTests
             """);
         var client = CreateClient(handler);
 
-        var status = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
+        var result = await client.SendVerificationMessageAsync(new SendVerificationMessageRequest("+391234567890")
         {
             CodeLength = 6,
             Ttl = 60,
@@ -42,6 +42,9 @@ public sealed class TelegramGatewayClientTests
         Assert.Equal(HttpMethod.Post, handler.Method);
         Assert.Equal("Bearer TEST_TOKEN", handler.AuthorizationHeader);
 
+        Assert.True(result.Ok);
+        Assert.Null(result.Error);
+        var status = result.Value!;
         Assert.Equal("abc123", status.RequestId);
         Assert.Equal("+391234567890", status.PhoneNumber);
         Assert.Equal(0.01, status.RequestCost);
@@ -96,11 +99,13 @@ public sealed class TelegramGatewayClientTests
             """);
         var client = CreateClient(handler);
 
-        var status = await client.CheckVerificationStatusAsync(new CheckVerificationStatusRequest("abc123")
+        var result = await client.CheckVerificationStatusAsync(new CheckVerificationStatusRequest("abc123")
         {
             Code = "123456"
         });
 
+        Assert.True(result.Ok);
+        var status = result.Value!;
         Assert.NotNull(status.VerificationStatus);
         Assert.Equal(CodeVerificationStatus.CodeMaxAttemptsExceeded, status.VerificationStatus!.Status);
         Assert.Equal("000000", status.VerificationStatus.CodeEntered);
@@ -116,32 +121,51 @@ public sealed class TelegramGatewayClientTests
         using var handler = new RecordingHandler("""{ "ok": true, "result": true }""");
         var client = CreateClient(handler);
 
-        bool revoked = await client.RevokeVerificationMessageAsync(new RevokeVerificationMessageRequest("abc123"));
+        var result = await client.RevokeVerificationMessageAsync(new RevokeVerificationMessageRequest("abc123"));
 
-        Assert.True(revoked);
+        Assert.True(result.Ok);
+        Assert.True(result.Value);
         Assert.Equal("https://example.test/revokeVerificationMessage", handler.RequestUri?.ToString());
     }
 
     [Fact]
-    public async Task UnsuccessfulResponse_ThrowsWithErrorCode()
+    public async Task UnsuccessfulResponse_ReturnsFailureWithErrorCode_DoesNotThrow()
     {
         using var handler = new RecordingHandler("""{ "ok": false, "error": "ACCESS_TOKEN_INVALID" }""");
+        var client = CreateClient(handler);
+
+        var result = await client.CheckSendAbilityAsync(new CheckSendAbilityRequest("+1"));
+
+        Assert.False(result.Ok);
+        Assert.Equal("ACCESS_TOKEN_INVALID", result.Error);
+        Assert.Null(result.Value);
+    }
+
+    [Fact]
+    public async Task MalformedResponse_ThrowsWithStatusCodeAndBody()
+    {
+        using var handler = new RecordingHandler("not json", HttpStatusCode.BadGateway);
         var client = CreateClient(handler);
 
         var ex = await Assert.ThrowsAsync<TelegramGatewayException>(() =>
             client.CheckSendAbilityAsync(new CheckSendAbilityRequest("+1")));
 
-        Assert.Equal("ACCESS_TOKEN_INVALID", ex.Error);
+        Assert.Equal(502, ex.StatusCode);
+        Assert.Equal("not json", ex.ResponseBody);
     }
 
     [Fact]
-    public async Task MalformedResponse_ThrowsTelegramGatewayException()
+    public async Task TransportFailure_ThrowsWithoutStatusCode()
     {
-        using var handler = new RecordingHandler("not json", HttpStatusCode.OK);
+        using var handler = new ThrowingHandler(new HttpRequestException("connection refused"));
         var client = CreateClient(handler);
 
-        await Assert.ThrowsAsync<TelegramGatewayException>(() =>
+        var ex = await Assert.ThrowsAsync<TelegramGatewayException>(() =>
             client.CheckSendAbilityAsync(new CheckSendAbilityRequest("+1")));
+
+        Assert.Null(ex.StatusCode);
+        Assert.Null(ex.ResponseBody);
+        Assert.IsType<HttpRequestException>(ex.InnerException);
     }
 
     [Fact]
@@ -164,8 +188,9 @@ public sealed class TelegramGatewayClientTests
             """);
         var client = CreateClient(handler);
 
-        var status = await client.CheckSendAbilityAsync(new CheckSendAbilityRequest("+1"));
+        var result = await client.CheckSendAbilityAsync(new CheckSendAbilityRequest("+1"));
 
-        Assert.Equal(MessageDeliveryStatus.Unknown, status.DeliveryStatus!.Status);
+        Assert.True(result.Ok);
+        Assert.Equal(MessageDeliveryStatus.Unknown, result.Value!.DeliveryStatus!.Status);
     }
 }
