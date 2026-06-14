@@ -1,24 +1,28 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/ai-iskuzhin/TelegramGatewayNet/main/assets/icon.png" width="128" alt="TelegramGatewayNet logo" />
-</p>
+<table>
+  <tr>
+    <td width="170" align="center" valign="middle">
+      <img src="https://raw.githubusercontent.com/ai-iskuzhin/TelegramGatewayNet/main/assets/icon.png" width="140" alt="TelegramGatewayNet logo" />
+    </td>
+    <td valign="middle">
+      <h1>TelegramGatewayNet</h1>
+      <p>A clean, dependency-light .NET SDK for the <a href="https://core.telegram.org/gateway/api">Telegram Gateway API</a> — deliver verification codes (OTP) to users over Telegram.</p>
+      <p>
+        <a href="https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml"><img src="https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+        <a href="https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/release.yml"><img src="https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/release.yml/badge.svg" alt="Release" /></a>
+        <a href="https://github.com/ai-iskuzhin/TelegramGatewayNet/blob/main/LICENSE"><img src="https://img.shields.io/github/license/ai-iskuzhin/TelegramGatewayNet?style=flat-square" alt="License" /></a>
+        <a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/targets-netstandard2.0%20%7C%20net8.0%20%7C%20net10.0-512BD4?logo=dotnet&amp;style=flat-square" alt="Targets" /></a>
+      </p>
+      <p>
+        <a href="https://www.nuget.org/packages/TelegramGatewayNet"><img src="https://img.shields.io/nuget/v/TelegramGatewayNet?logo=nuget&amp;style=flat-square" alt="NuGet version" /></a>
+        <a href="https://www.nuget.org/packages/TelegramGatewayNet"><img src="https://img.shields.io/nuget/dt/TelegramGatewayNet?style=flat-square" alt="NuGet downloads" /></a>
+      </p>
+    </td>
+  </tr>
+</table>
 
-# TelegramGatewayNet
-
-[![CI](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/ci.yml)
-[![Release](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/release.yml/badge.svg)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/release.yml)
-[![License](https://img.shields.io/github/license/ai-iskuzhin/TelegramGatewayNet?style=flat-square)](https://github.com/ai-iskuzhin/TelegramGatewayNet/blob/main/LICENSE)
-[![Targets](https://img.shields.io/badge/targets-netstandard2.0%20%7C%20net8.0%20%7C%20net10.0-512BD4?logo=dotnet&style=flat-square)](https://dotnet.microsoft.com/)
-
-| Package | Latest version | Downloads |
-| :--- | :---: | :---: |
-| `TelegramGatewayNet` | [![TelegramGatewayNet NuGet](https://img.shields.io/nuget/vpre/TelegramGatewayNet?logo=nuget&style=flat-square)](https://www.nuget.org/packages/TelegramGatewayNet) | [![TelegramGatewayNet Downloads](https://img.shields.io/nuget/dt/TelegramGatewayNet?style=flat-square)](https://www.nuget.org/packages/TelegramGatewayNet) |
-
-A clean, dependency-light .NET SDK for the [Telegram Gateway API](https://core.telegram.org/gateway/api).
-Use it to deliver verification codes (OTP) to users over Telegram — a cheaper, more secure
-alternative to SMS.
-
-Current status: stable `1.0.0`. The SDK surface covers every documented Gateway API method plus
-delivery report (webhook) signature validation, and follows Semantic Versioning.
+A cheaper, more secure alternative to SMS for delivering verification codes. The SDK covers every
+documented Gateway API method plus delivery report (webhook) signature validation, and follows
+Semantic Versioning.
 
 ## Installation
 
