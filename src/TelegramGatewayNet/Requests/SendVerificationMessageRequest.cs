@@ -8,12 +8,34 @@ namespace TelegramGatewayNet.Requests
     public sealed class SendVerificationMessageRequest
     {
         /// <summary>
-        /// Creates a new request for the given phone number.
+        /// Creates a request that lets Telegram generate a verification code of its default length.
         /// </summary>
         /// <param name="phoneNumber">The recipient phone number in E.164 format (for example <c>+391234567890</c>).</param>
         public SendVerificationMessageRequest(string phoneNumber)
         {
             PhoneNumber = phoneNumber;
+        }
+
+        /// <summary>
+        /// Creates a request that uses a verification code you generated yourself.
+        /// </summary>
+        /// <param name="phoneNumber">The recipient phone number in E.164 format.</param>
+        /// <param name="code">The verification code. Only fully numeric strings 4-8 characters long are supported.</param>
+        public SendVerificationMessageRequest(string phoneNumber, string code)
+        {
+            PhoneNumber = phoneNumber;
+            Code = code;
+        }
+
+        /// <summary>
+        /// Creates a request that lets Telegram generate a verification code of the given length.
+        /// </summary>
+        /// <param name="phoneNumber">The recipient phone number in E.164 format.</param>
+        /// <param name="codeLength">The length of the code Telegram should generate (4 to 8).</param>
+        public SendVerificationMessageRequest(string phoneNumber, int codeLength)
+        {
+            PhoneNumber = phoneNumber;
+            CodeLength = codeLength;
         }
 
         /// <summary>The phone number to which to send a verification message, in E.164 format.</summary>

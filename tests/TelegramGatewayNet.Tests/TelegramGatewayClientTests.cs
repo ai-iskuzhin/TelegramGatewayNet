@@ -175,6 +175,22 @@ public sealed class TelegramGatewayClientTests
     }
 
     [Fact]
+    public void SendRequestConstructors_SetTheRightField()
+    {
+        var generatedDefault = new SendVerificationMessageRequest("+1");
+        Assert.Null(generatedDefault.Code);
+        Assert.Null(generatedDefault.CodeLength);
+
+        var ownCode = new SendVerificationMessageRequest("+1", "123456");
+        Assert.Equal("123456", ownCode.Code);
+        Assert.Null(ownCode.CodeLength);
+
+        var generatedLength = new SendVerificationMessageRequest("+1", 6);
+        Assert.Equal(6, generatedLength.CodeLength);
+        Assert.Null(generatedLength.Code);
+    }
+
+    [Fact]
     public async Task UnknownStatusValue_DeserializesToUnknown()
     {
         using var handler = new RecordingHandler("""

@@ -61,6 +61,20 @@ else
 The token is sent as an `Authorization: Bearer <token>` header on every request, and all calls are
 made as `application/json` POSTs.
 
+### Choosing the code
+
+`SendVerificationMessageRequest` has a constructor for each way of choosing the verification code:
+
+```csharp
+new SendVerificationMessageRequest("+391234567890")            // Telegram generates a default-length code
+new SendVerificationMessageRequest("+391234567890", 6)         // Telegram generates a 6-digit code
+new SendVerificationMessageRequest("+391234567890", "123456")  // use your own code
+```
+
+(If you set both `Code` and `CodeLength` directly, `Code` wins — `CodeLength` is ignored, matching
+the API.) The remaining options (`Ttl`, `Payload`, `CallbackUrl`, `SenderUsername`, `RequestId`) are
+set via object initializer regardless of which constructor you use.
+
 ## Supported Methods
 
 All methods return a `GatewayResult<T>` (see [Error Handling](#error-handling)).

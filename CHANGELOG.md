@@ -10,6 +10,10 @@ No changes yet.
 
 ## 0.1.0-preview.3
 
+### Added
+
+- `SendVerificationMessageRequest` constructor overloads for each code-selection mode: `(phoneNumber)` (Telegram generates a default-length code), `(phoneNumber, int codeLength)` (Telegram generates the given length), and `(phoneNumber, string code)` (use your own code).
+
 ### Changed
 
 - **Result-based error model (breaking).** Client methods now return `GatewayResult<T>` instead of the bare payload. An `ok: false` API response (for example `PHONE_NUMBER_INVALID`) is a normal result reported via `GatewayResult<T>.Error` and is no longer thrown.
