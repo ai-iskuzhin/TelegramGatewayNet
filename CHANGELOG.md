@@ -8,6 +8,12 @@ The project uses Semantic Versioning. Versions below `1.0.0` are preview release
 
 No changes yet.
 
+## 0.1.0-preview.2
+
+### Changed
+
+- Multi-target the package: `netstandard2.0;net8.0;net10.0`. The `System.Text.Json` dependency is now conditional on `netstandard2.0` only — `net8.0` and `net10.0` consumers use the in-box version and carry no extra dependency.
+
 ## 0.1.0-preview.1
 
 ### Added

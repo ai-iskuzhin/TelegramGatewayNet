@@ -5,7 +5,7 @@
 [![Publish NuGet](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-nuget.yml/badge.svg)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-nuget.yml)
 [![Publish GitHub Packages](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-github-packages.yml/badge.svg)](https://github.com/ai-iskuzhin/TelegramGatewayNet/actions/workflows/publish-github-packages.yml)
 [![License](https://img.shields.io/github/license/ai-iskuzhin/TelegramGatewayNet?style=flat-square)](https://github.com/ai-iskuzhin/TelegramGatewayNet/blob/main/LICENSE)
-[![.NET Standard](https://img.shields.io/badge/.NET%20Standard-2.0-512BD4?logo=dotnet&style=flat-square)](https://dotnet.microsoft.com/)
+[![Targets](https://img.shields.io/badge/targets-netstandard2.0%20%7C%20net8.0%20%7C%20net10.0-512BD4?logo=dotnet&style=flat-square)](https://dotnet.microsoft.com/)
 
 | Package | Latest version | Downloads |
 | :--- | :---: | :---: |
@@ -24,8 +24,10 @@ Gateway API method plus delivery report (webhook) signature validation.
 dotnet add package TelegramGatewayNet --prerelease
 ```
 
-The library targets `netstandard2.0`, so it runs on .NET Framework 4.6.1+, .NET Core 2.0+, and
-.NET 5 and later. Its only dependency is `System.Text.Json`.
+The library multi-targets `netstandard2.0`, `net8.0`, and `net10.0`. The `netstandard2.0` asset
+runs on .NET Framework 4.6.1+, .NET Core 2.0+, Mono, and Unity; modern consumers resolve the
+`net8.0`/`net10.0` assets, which use the in-box `System.Text.Json` and carry no extra dependency.
+Only the `netstandard2.0` asset pulls in the `System.Text.Json` package.
 
 For local development you can reference the project directly:
 

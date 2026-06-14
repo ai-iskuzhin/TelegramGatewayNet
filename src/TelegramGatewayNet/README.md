@@ -9,7 +9,8 @@ deliver verification codes (OTP) to users over Telegram.
 dotnet add package TelegramGatewayNet --prerelease
 ```
 
-Targets `netstandard2.0`, so it runs on .NET Framework 4.6.1+, .NET Core, and .NET 5+.
+Multi-targets `netstandard2.0`, `net8.0`, and `net10.0` — runs on .NET Framework 4.6.1+, .NET Core,
+and modern .NET. Only the `netstandard2.0` asset depends on the `System.Text.Json` package.
 
 ## Quick Start
 
