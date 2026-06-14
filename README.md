@@ -174,7 +174,7 @@ dotnet pack src/TelegramGatewayNet/TelegramGatewayNet.csproj --configuration Rel
 
 - [Release process](docs/release.md)
 - [Changelog](CHANGELOG.md)
-- [Telegram Gateway API reference](telegram-gateway-api.md)
+- [Telegram Gateway API reference](docs/telegram-gateway-api.md)
 
 ## License
 
